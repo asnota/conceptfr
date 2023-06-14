@@ -3,8 +3,9 @@ This repository presents bilingual English–French dataset and benchmark with p
 The dataset contains 28K of English–French sentence pairs with the keywords and a main concept for each data entry. 
 This dataset targets testing the generative abilities of a model to produce a commonsense knowledge text given a set of keywords as a condition.
 
-</br>
+
 ## Statistics
+
 The statistics on the whole dataset is given in Table 1, showing the number of entries in each set, the number of keywords in each size category, minimum, maximum and median lengths of English (EN) and French (FR) sentences. 
 The sentence length was calculated with the GEM-metrics package. 
 The validation and test splits were extracted from a golden subset.
@@ -16,13 +17,16 @@ title: Table 1. Dataset basic statistics
 <img src="./Tables/Statistics.PNG"/>
 </br>
 
-</br>
+
 ## Dataset construction
+
 The dataset was built in a semi-automatic way, via data retrieval from translation sites, which provided a sentence illustrating a common concept usage in English and French. 
 The scraped data contained a concept-sentence pair, while the keywords were further retrieved using Spacy via part-of-speech (POS) filtering.
 The targeted POS of the main concept included nouns, verbs, adjectives and adverbs - other parts of speech were not considered.
 
+
 ## Data cleaning
+
 The scraped material needed further adjustments within a concept–sentence pair as well as within the language pair. 
 An automated cleaning pipeline was applied to the data cleaning and consisted of the length filtering, language switch, similarity calculation between English and French sentences, concepts validity verification and filling in missing French main concepts.
 
@@ -42,7 +46,7 @@ The sites with the content compiled dynamically were susceptible to returning th
 For this problem, a multilingual version of <a href="https://github.com/Tiiiger/bert_score">BERTScore</a> was applied, measuring the semantic correspondence between English–French sentence pairs. 
 It was observed, that the sentences with a BERTScore below 0.7 had no semantic match, therefore were eliminated from the dataset.
 
-### Concepts Validity verification
+### Concepts validity verification
 The automated cleaning also included the elimination of entries, where the main concept was not informative (abbreviations) or contained insults, done via a manual check of the concepts validity.
 
 ### Missing French main concepts
@@ -50,8 +54,9 @@ Whenever the French equivalent of the main English concept was not scraped, fill
 The verification of the concept translation correctness was done via mapping between the main concept and the keywords extracted with POS filter. 
 Thus, the French concept received via translation had to be found in the French keywords, extracted from the sentence.
 
-</br>
+
 ## Golden subset
+
 The human review of the gathered data was applied to build a golden partition of data. The human review has several advantages, such as:
 
 -	A perfect concept coverage in the sentence (while the automatically treated data might contain a synonym, used as a replacement of the searched concept in a sentence); 
@@ -103,8 +108,9 @@ A full list of the correction conditions is given below:
 16.	Si l’entrée est invalide pour une autre raison que “tag”, “2 phrases” ou “ethics”, rajouter la colonne eliminate et préciser la raison “misc”.
 ```
 
-</br>
+
 ## Splits formation
+
 The golden subset was used to select entries for the test and validation splits. 
 The main reason of this step was a complete correspondence between French and English partitions of data, expressed in the same keywords length and POS of the main concept. 
 The equalized partition totaled to 3K entries (1500 for test and 1500 for validation splits). 
@@ -129,7 +135,9 @@ We can also observe a similar distribution of the POS groups for the constructed
 <em>Figure 1. POS profiles of the main concept in validation and test sets: m and f stand for masculine and feminine nouns, v, adj and adv stand for verb, adjective and adverb respectively, mf represents the noun which may be masculine and feminine at the same time, plm and plf represent masculine and feminine nouns that exist in a plural form only.</em>
 </br>
 
+
 ## Preparation of the existing benchmark for comparison experiment
+
 In order to meet the level of diversity inherent to the ConceptFR dataset, we apply several steps for data filtering of the CommonGen dataset before creating a finetuned model on CommonGen data, such as:
 1.	Elimination of target sentence duplicates.
 2.	Elimination of concept set duplicates.
@@ -137,32 +145,37 @@ In order to meet the level of diversity inherent to the ConceptFR dataset, we ap
 4.	Elimination of sentences with non-common or non-sense content.
 The examples of eliminated content are given in Table 2.
 ---
-title: Table 2. Examples of eliminated entries from the CommonGen dataset
+Table 2. Examples of eliminated entries from the CommonGen dataset
 ---
 </br>
 <img src="./Tables/Eliminated_entries_CommonGen.PNG"/>
 </br>
 
-</br>
+
 ## Gender distribution
+
 The dataset is slightly biased in terms of gender representation with 10,2% of entries labeled as feminine, 16,48% as masculine and 73,32% as neutral content. 
 The bias detection was done with Gender Bias Filter from the NL-Augmenter package released with the 2nd GEM edition [6], using an English partition of the ConceptFR dataset. 
 We will work towards the elimination of this bias in the 2nd edition of the dataset.
 
-</br>
+
 ## Carbon print
+
 Experiments were conducted using Jupiter notebooks in Colab (GPU) and Kaggle (CPU) environments. 
 A cumulative of 4 hours of computation was performed on the hardware of type GPU (NVIDIA Tesla K80 GPU) and 45 hours of computation was performed on the hardware of type CPU (Intel(R) Xeon(R) CPU). 
 Total emissions are estimated to be 0,66 kgCO2. 
 Estimations were conducted using the CodeCarbon emissions tracker [[1]](https://arxiv.org/abs/1910.09700), [[2]](https://arxiv.org/abs/1911.08354).
 
-</br>
+
 ## Limitations
+
 Despite the effort in automated cleaning pipeline application, the entries outside the golden subset might contain biased content, therefore should be used with caution for training models in legally bounding or decision-making contexts, where gender, race or other ethical factors play an important role and may induce discrimination towards minority groups. 
 The data gathered in this project may be used for research purposes only. 
 The legal allegations which may arise from the non-intended use of the gathered data do not apply to the data collector.
 
+
 ## References
+
 _[1]_
 ```bibtex
 @misc{lacoste2019quantifying,
