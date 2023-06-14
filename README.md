@@ -11,7 +11,7 @@ The sentence length was calculated with the GEM-metrics package.
 The validation and test splits were extracted from a golden subset.
 
 ---
-title: Table 1. Dataset basic statistics
+Table 1. Dataset basic statistics
 ---
 </br>
 <img src="./Tables/Statistics.PNG"/>
@@ -49,7 +49,7 @@ It was observed, that the sentences with a BERTScore below 0.7 had no semantic m
 ### Concepts validity verification
 The automated cleaning also included the elimination of entries, where the main concept was not informative (abbreviations) or contained insults, done via a manual check of the concepts validity.
 
-### Missing French main concepts
+### Missing French main concepts replacement
 Whenever the French equivalent of the main English concept was not scraped, filling in the missing French concept was done using <a href="https://pypi.org/project/detectlanguage/">deep-translator API</a>. 
 The verification of the concept translation correctness was done via mapping between the main concept and the keywords extracted with POS filter. 
 Thus, the French concept received via translation had to be found in the French keywords, extracted from the sentence.
