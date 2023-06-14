@@ -13,7 +13,7 @@ The validation and test splits were extracted from a golden subset.
 title: Table 1. Dataset basic statistics
 ---
 </br>
-<img src="./Tables/Table_Statistics.PNG"/>
+<img src="./Tables/Statistics.PNG"/>
 </br>
 
 </br>
@@ -53,11 +53,14 @@ Thus, the French concept received via translation had to be found in the French 
 </br>
 ## Golden subset
 The human review of the gathered data was applied to build a golden partition of data. The human review has several advantages, such as:
+
 -	A perfect concept coverage in the sentence (while the automatically treated data might contain a synonym, used as a replacement of the searched concept in a sentence); 
 -	Entries, free from redundant information regarding the concepts (alternative formulations, frequent use with other words etc.);
 -	Filtered out auxiliary verbs from the keywords’ set, used to create a language tense and left as semantically meaningful by the Spacy POS tagger.
 -	POS tag column creation for the main French concept, corresponding to the concept usage in a French sentence. 
+
 The nomenclature for POS tagging is given befow:
+
 ```
 'v' 		– verbe
 'f' 		– nom féminin au singulier
