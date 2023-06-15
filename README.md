@@ -28,7 +28,7 @@ The targeted POS of the main concept included nouns, verbs, adjectives and adver
 ## Data cleaning
 
 The scraped material needed further adjustments within a concept–sentence pair as well as within the language pair. 
-An automated cleaning pipeline was applied to the data cleaning and consisted of the length filtering, language switch, similarity calculation between English and French sentences, concepts validity verification and filling in missing French main concepts.
+An automated cleaning pipeline was applied to the data cleaning and consisted of length filtering, language switch, similarity calculation between English and French sentences, concepts validity verification and filling in missing French main concepts.
 
 ### Length filtering
 The length requirements were applied to several parameters of scraped data, filtering out the entries outside the defined length windows:
@@ -47,7 +47,7 @@ For this problem, a multilingual version of <a href="https://github.com/Tiiiger/
 It was observed, that the sentences with a BERTScore below 0.7 had no semantic match, therefore were eliminated from the dataset.
 
 ### Concepts validity verification
-The automated cleaning also included the elimination of entries, where the main concept was not informative (abbreviations) or contained insults, done via a manual check of the concepts validity.
+The automated cleaning also included the elimination of entries, where the main concept was not informative (abbreviations) or contained insults, done via a manual check of the validity of concepts.
 
 ### Missing French main concepts replacement
 Whenever the French equivalent of the main English concept was not scraped, filling in the missing French concept was done using <a href="https://pypi.org/project/detectlanguage/">deep-translator API</a>. 
@@ -112,8 +112,8 @@ A full list of the correction conditions is given below:
 ## Splits formation
 
 The golden subset was used to select entries for the test and validation splits. 
-The main reason of this step was a complete correspondence between French and English partitions of data, expressed in the same keywords length and POS of the main concept. 
-The equalized partition totaled to 3K entries (1500 for test and 1500 for validation splits). 
+The main reason for this step was a complete correspondence between French and English partitions of data, expressed in the same keywords length and POS of the main concept. 
+The equalized partition totaled 3K entries (1500 for test and 1500 for validation splits). 
 The remaining 3266 entries are provided in a separate split, which can be added to the training set or used for additional validation tests.
 
 The main filtering criteria, deciding for the entry inclusion to either test or validation split, consisted of an equal number of keywords between French and English dataset partitions. 
@@ -121,9 +121,9 @@ For example, if the number of English keywords equalled 3, the number of French 
 The number of entries that satisfied this criterion totalled 3900, from which only 3000 were left, due to the groups’ equalization. 
 The groups affected by the equalization process contained 3, 4 and 5 keywords respectively, since these groups contained the biggest number of entries. 
 The groups with 6 and 7 keywords were less numbered, therefore no equalization process was applied to balance the keywords’ quantities. 
-The candidates for elimination were defined by grouping of entries according to the POS tag of the main concepts. 
+The candidates for elimination were defined by the grouping of entries according to the POS tag of the main concepts. 
 Thus, the equalization of the POS groups allowed to filter out redundant entries, exceeding the equality limit. 
-The entries selected via such elimination process contained prevailing number in the groups of nouns and verbs as a POS descriptor of the main concept.
+The entries selected via such an elimination process contained the prevailing number in the groups of nouns and verbs as a POS descriptor of the main concept.
 
 The final POS profile of the test and validation splits is shown in Fig. 1. 
 As we can see, the prevailing number of entries have verb and noun POSs for the main concept. 
@@ -134,6 +134,15 @@ We can also observe a similar distribution of the POS groups for the constructed
 <img src="./Tables/POS_profiles.PNG"/>
 <em>Figure 1. POS profiles of the main concept in validation and test sets: m and f stand for masculine and feminine nouns, v, adj and adv stand for verb, adjective and adverb respectively, mf represents the noun which may be masculine and feminine at the same time, plm and plf represent masculine and feminine nouns that exist in a plural form only.</em>
 </br>
+
+
+## Experiment
+We choose the BART-base multilingual pre-trained transformer [[1]](https://arxiv.org/abs/1910.09700) for the finetuning of three models on English and French partitions of the ConceptFR data (BART-CFR-EN and BART-CFR-FR models respectively) and on CommonGen data in English (BART-CGen model). 
+We then test the BART-CGen and BART-CFR-EN models, both trained on English texts, with the test set from the CommonGen and English partition of the ConceptFR datasets. 
+Therefore, a cross-validation of the results is performed – the model generates sentences out of the keywords containing the vocabulary, similar to the data used during the training phase, as well as out of the keywords with unfamiliar vocabulary. 
+The cross-validation between English models allows comparing the complexity of the content from the ConceptFR and CommonGen datasets. Further comparison is done with the text generated by the BART-CFR-FR model, using the ConceptFR French data partition. 
+The latter accounts for the language richness factor.
+More details on the experiment can be found in a dedicated paper [[2]](https://arxiv.org/abs/1910.09700).
 
 
 ## Preparation of the existing benchmark for comparison experiment
@@ -151,6 +160,21 @@ Table 2. Examples of eliminated entries from the CommonGen dataset
 <img src="./Tables/Eliminated_entries_CommonGen.PNG"/>
 </br>
 
+## Generated text
+
+The analysis of the generated content by three finetuned models (Table 3) reveals that the generations made by the BART-CGen model lack the order of the covered keywords, which is explained by the organization of the training data (the order of the keywords and their appearance in a reference sentence do not correlate). 
+The same BART-CGen model also tends to include redundant keywords when unseen input is given, which was reflected already by diversity metrics. 
+The BART-CFR-EN model generates coherent sentences with good concept coverage and as its English counterpart (BART-CGen), uses the gerund forms of verbs. 
+The text generated by BART-CFR-EN model also tends to be more imperative, while the BART-CGen model generates more descriptive sentences. 
+No drop in performance was observed when the BART-CFR-EN model was requested to generate a sentence with the keywords of unfamiliar style. 
+Finally, the French BART-CFR-FR model also generates coherent, grammatically correct sentences, similar to the model trained on parallel English partition of the ConceptFR data (BART-CFR-EN).
+
+---
+Table 3. Examples of generated text (gen.) compared to the target references (ref.). Blue color marks the correct inclusion of the keyword, orange – a redundant inclusion.
+---
+</br>
+<img src="./Tables/Generated_text.PNG"/>
+</br>
 
 ## Gender distribution
 
@@ -164,7 +188,7 @@ We will work towards the elimination of this bias in the 2nd edition of the data
 Experiments were conducted using Jupiter notebooks in Colab (GPU) and Kaggle (CPU) environments. 
 A cumulative of 4 hours of computation was performed on the hardware of type GPU (NVIDIA Tesla K80 GPU) and 45 hours of computation was performed on the hardware of type CPU (Intel(R) Xeon(R) CPU). 
 Total emissions are estimated to be 0,66 kgCO2. 
-Estimations were conducted using the CodeCarbon emissions tracker [[1]](https://arxiv.org/abs/1910.09700), [[2]](https://arxiv.org/abs/1911.08354).
+Estimations were conducted using the CodeCarbon emissions tracker [[3]](https://arxiv.org/abs/1910.09700), [[4]](https://arxiv.org/abs/1911.08354).
 
 
 ## Limitations
@@ -178,6 +202,30 @@ The legal allegations which may arise from the non-intended use of the gathered 
 
 _[1]_
 ```bibtex
+@misc{lewis2019bart,
+      title={BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension}, 
+      author={Mike Lewis and Yinhan Liu and Naman Goyal and Marjan Ghazvininejad and Abdelrahman Mohamed and Omer Levy and Ves Stoyanov and Luke Zettlemoyer},
+      year={2019},
+      eprint={1910.13461},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
+
+_[2]_
+```bibtex
+@misc{shvets2023conceptfr,
+      title={ConceptFR: a Bilingual English–French Dataset for Natural Language Generation}, 
+      author={Anna Shvets},
+      year={2023},
+      eprint={cmp-lg/9508001},
+      archivePrefix={arXiv},
+      primaryClass={cmp-lg}
+}
+```
+
+_[3]_
+```bibtex
 @misc{lacoste2019quantifying,
       title={Quantifying the Carbon Emissions of Machine Learning}, 
       author={Alexandre Lacoste and Alexandra Luccioni and Victor Schmidt and Thomas Dandres},
@@ -187,7 +235,7 @@ _[1]_
       primaryClass={cs.CY}
 }
 ```
-_[2]_
+_[4]_
 ```bibtex
 @misc{lottick2019energy,
       title={Energy Usage Reports: Environmental awareness as part of algorithmic accountability}, 
