@@ -1,5 +1,5 @@
 # ConceptFR dataset
-This repository presents bilingual English–French dataset and benchmark with parallel data ConceptFR for constrained text generation task.
+This repository presents a bilingual English–French dataset and benchmark with parallel data ConceptFR for constrained text generation task.
 The dataset contains 28K of English–French sentence pairs with the keywords and a main concept for each data entry. 
 This dataset targets testing the generative abilities of a model to produce a commonsense knowledge text given a set of keywords as a condition.
 
