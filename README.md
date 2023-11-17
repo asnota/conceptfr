@@ -215,11 +215,11 @@ _[1]_
 
 _[2]_
 ```bibtex
-@misc{shvets2023conceptfr,
+@inproceedings{shvets2023conceptfr,
       title={ConceptFR: a Bilingual English–French Dataset for Natural Language Generation}, 
       author={Anna Shvets},
       year={2023},
-      eprint={cmp-lg/9508001},
+      eprint={JCRAI 2023},
       archivePrefix={arXiv},
       primaryClass={cmp-lg}
 }
